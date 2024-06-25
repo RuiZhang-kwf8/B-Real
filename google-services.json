@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "902656103797",
+    "project_id": "bytes-16ffa",
+    "storage_bucket": "bytes-16ffa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:902656103797:android:84bda35b1e6aac0b15ef3c",
+        "android_client_info": {
+          "package_name": "com.Rui.Bytes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAO0DcXgQrFnGCcKeXlTX61e0NBFI5a-dE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
