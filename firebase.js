@@ -1,6 +1,7 @@
-// firebase.js
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getDatabase } from 'firebase/database';
 
 const firebaseConfig = {
     apiKey: "AIzaSyAYWHIZRfYo8gVV7YYmp9ft5dDiHif5EEE",
@@ -11,8 +12,10 @@ const firebaseConfig = {
     messagingSenderId: "902656103797",
     appId: "1:902656103797:web:18a0e7948d0fcf5215ef3c",
     measurementId: "G-2JXHKEHVMR"
-  };
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+};
 
-export { app, auth };
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+export { app, db };
+

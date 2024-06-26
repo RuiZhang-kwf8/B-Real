@@ -2,8 +2,9 @@ import React from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import ProfileScreen from './components/ProfileScreen.js'
-import HomeScreen from './components/HomeScreen.js'
+import ProfileScreen from './components/ProfileScreen.js';
+import HomeScreen from './components/HomeScreen.js';
+import AuthScreen from './components/AuthScreen.js';
 import {initializeApp} from '@firebase/app'; 
 const Stack = createNativeStackNavigator();
 
@@ -19,6 +20,11 @@ export default function App() {
         <Stack.Screen
           name="Profile"
           component={ProfileScreen}
+        />
+
+<Stack.Screen
+          name="AuthScreen"
+          component={AuthScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>

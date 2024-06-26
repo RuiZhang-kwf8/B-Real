@@ -7,9 +7,9 @@ const HomeScreen = ({ navigation }) => {
     <View style={styles.container}>
       <Text>Welcome to Home Screen!</Text>
       <Button
-        title="Go to Jane's profile"
+        title="Go to Authentication Screen"
         onPress={() =>
-          navigation.navigate('Profile', { name: 'Jane' })
+          navigation.navigate('AuthScreen') 
         }
       />
     </View>
