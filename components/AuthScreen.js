@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Alert } from 'react-native';
+import { View, TextInput, Button, Alert, StyleSheet } from 'react-native';
 import { db } from '../firebase.js'; // Import the db object from firebase.js
 import { ref, set, push } from 'firebase/database';
 
@@ -25,10 +25,12 @@ const SignInScreen = ({ navigation }) => {
         username: username,
         email: email,
         password: password, // Note: In production, hash the password before saving
-      };
-
+        friends: []
+    };
+  
       // Save the new user to the database under 'users/userId'
       await set(ref(db, `users/${userId}`), newUser);
+        
 
       // Optionally navigate to another screen after successful sign-in
       navigation.navigate('Profile', { name: username });
@@ -39,27 +41,36 @@ const SignInScreen = ({ navigation }) => {
     }
   };
 
+  // Function to check if all inputs are filled
+  const isFormValid = () => {
+    return email.trim() !== '' && password.trim() !== '' && username.trim() !== '';
+  };
+
   return (
-    <View>
+    <View style={styles.container}>
       <TextInput
         placeholder="Email"
         onChangeText={setEmail}
         value={email}
+        style={styles.input}
       />
       <TextInput
         placeholder="Password"
         onChangeText={setPassword}
         value={password}
         secureTextEntry
+        style={styles.input}
       />
       <TextInput
         placeholder="Username"
         onChangeText={setUsername}
         value={username}
+        style={styles.input}
       />
       <Button
         title="Sign In"
         onPress={handleSignIn}
+        disabled={!isFormValid()} // Disable the button if the form is not valid
       />
       {username && signed && (
         <Button
@@ -70,5 +81,20 @@ const SignInScreen = ({ navigation }) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#fff',
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 12,
+    paddingHorizontal: 8,
+  },
+});
 
 export default SignInScreen;

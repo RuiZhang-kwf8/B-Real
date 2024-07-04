@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ProfileScreen from './components/ProfileScreen.js';
 import HomeScreen from './components/HomeScreen.js';
-import AuthScreen from './components/AuthScreen.js';
+import SignInScreen from './components/AuthScreen.js';
 import {initializeApp} from '@firebase/app'; 
 const Stack = createNativeStackNavigator();
 
@@ -24,7 +24,7 @@ export default function App() {
 
 <Stack.Screen
           name="AuthScreen"
-          component={AuthScreen}
+          component={SignInScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
