@@ -25,12 +25,12 @@ const SignInScreen = ({ navigation }) => {
         username: username,
         email: email,
         password: password, // Note: In production, hash the password before saving
-        friends: []
+        friends: [username]
     };
   
       // Save the new user to the database under 'users/userId'
       await set(ref(db, `users/${userId}`), newUser);
-        
+
 
       // Optionally navigate to another screen after successful sign-in
       navigation.navigate('Profile', { name: username });

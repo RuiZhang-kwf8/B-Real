@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { db } from '../firebase'; // Adjust the path if needed
-import { ref, query, orderByChild, equalTo, get } from 'firebase/database';
+import { ref, query, orderByChild, equalTo, get, update, set, arrayUnion} from 'firebase/database';
 import * as Contacts from 'expo-contacts';
 import {
     FlatList, 
@@ -15,13 +15,14 @@ import {
     Button
   } from 'react-native';
 
-const ProfileScreen = ({ route }) => {
-  const { name } = route.params;
+const ProfileScreen = ({ navigation, route }) => {
+  const {name} = route.params;
   const [users, setUsers] = useState([]);
   const [contacts, setContacts] = useState([]);
   const [contactPermission, setContactPermission] = useState(null); // State to track permission status
   const [searchValue, setSearchValue] = useState("");
   const [global, setGlobal] = useState([]);
+  const [lookup, setLookup] = useState("");
 
    const handleSearch = () => {
     if (searchValue.trim() != "") {
@@ -35,6 +36,27 @@ const ProfileScreen = ({ route }) => {
         setContacts(global);
  
     }
+}
+
+
+const addFriend = async (contact) => {
+    const friendname = contact.firstName;
+      // Save the new user to the database under 'users/userId'
+      console.log(lookup);
+      const userRef = ref(db, `users/${lookup}/friends`);
+      const snapshot = await get(userRef);
+      let currentFriends = snapshot.val() || []; // Use an empty array if no friends exist yet
+
+      // Add the new friend
+      currentFriends.push(friendname);
+
+      // Update the friends array
+      await update(ref(db, `users/${lookup}`), {
+          friends: currentFriends
+      });
+
+    
+    
 }
 
   const fetchContactsAsync = () => {
@@ -59,17 +81,20 @@ const ProfileScreen = ({ route }) => {
         const snapshot = await get(userQuery);
         if (snapshot.exists()) {
           const userData = snapshot.val();
-
           // Check if the 'friends' array exists and is empty
           console.log("ight");
-        
-          const userId = Object.keys(userData)[0];
-          const user = userData[userId];
+            console.log(Object.keys(userData)[0]); 
+            const lookups = Object.keys(userData)[0];
+            if (lookups) {
+                setLookup(lookups);
+
+            }
+          const user = userData[Object.keys(userData)[0]];
           console.log('Processed User Data:', userData);
           console.log('Processed User Data:', user);
     
           // Ensure the 'friends' key exists
-          if (!user.friends) {
+          if (user.friends.length === 1) {
             const { status } = await Contacts.requestPermissionsAsync();
             setContactPermission(status); // Update permission status state
             console.log("ight1");
@@ -109,7 +134,12 @@ const ProfileScreen = ({ route }) => {
   onChangeText={setSearchValue}
 />
       <Button title="Search" onPress={() => handleSearch()} />
-
+      <Button
+        title="View Posts"
+        onPress={() =>
+          navigation.navigate('Card') 
+        }
+      />
       {contactPermission === 'granted' ? (
         
           contacts.map((contact, index) => (
@@ -133,7 +163,12 @@ const ProfileScreen = ({ route }) => {
               ) : (
                 <Text></Text>
               )}
+
               <Text>{contact.firstName}</Text>
+              <Button
+        title="Add Friend"
+        onPress={() => addFriend(contact)}
+      />
               
             </View>
           ))
