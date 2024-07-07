@@ -1,3 +1,3 @@
 # BYTESSS
 
-A Clone of the popular app bereal ! 
+Zesty Clone of the popular app bereal ! 
