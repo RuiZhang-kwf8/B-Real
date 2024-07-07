@@ -24,7 +24,7 @@ const ProfileScreen = ({ navigation, route }) => {
   const [global, setGlobal] = useState([]);
   const [lookup, setLookup] = useState("");
 
-   const handleSearch = () => {
+  const handleSearch = () => {
     if (searchValue.trim() != "") {
         const filteredContacts = global.filter(contact =>
             contact.firstName &&
@@ -37,7 +37,6 @@ const ProfileScreen = ({ navigation, route }) => {
  
     }
 }
-
 
 const addFriend = async (contact) => {
     const friendname = contact.firstName;
