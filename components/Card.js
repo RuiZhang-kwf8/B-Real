@@ -1,22 +1,25 @@
-
     import React, { useState, useEffect, useRef } from 'react';
     import { Button, Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
     import Constants from 'expo-constants';
     import { Camera, CameraType,CameraView } from 'expo-camera';
     import * as MediaLibrary from 'expo-media-library';
     import { MaterialIcons } from '@expo/vector-icons';
-    
-    const Card = ({ navigation}) => {
+    import { db } from '../firebase'; // Adjust the path if needed
+import { ref, query, orderByChild, equalTo, get, update, set, arrayUnion, push} from 'firebase/database';
+
+
+    const Card = ({ navigation, route}) => {
+      const { userdata } = route.params;
+
       const [hasCameraPermission, setHasCameraPermission] = useState(null);
       const [image, setImage] = useState(null);
       const [type, setType] = useState("back");
       const [flash, setFlash] = useState("off");
       const cameraRef = useRef(null);
-    
+ 
     useEffect(() => {
         (async () => {
           MediaLibrary.requestPermissionsAsync();
-        
           const cameraStatus = await Camera.requestCameraPermissionsAsync();
           console.log(cameraStatus); 
           setHasCameraPermission(cameraStatus.status === 'granted');
@@ -27,24 +30,45 @@
   function toggleCameraFacing() {
     setType(current => (current === 'back' ? 'front' : 'back'));
   }
-      const takePicture = async () => {
+
+    const takePicture = async () => {
         if (cameraRef) {
-          try {
             const data = await cameraRef.current.takePictureAsync();
-            console.log(data);
             setImage(data.uri);
-          } catch (error) {
-            console.log(error);
-          }
-        }
-      };
+            console.log(data.uri);
+            const userRef = query(ref(db, 'users'), orderByChild('username'), equalTo(userdata));
+          
+            let snapshot = await get(userRef); 
+              const userId = Object.keys(snapshot.val())[0];
+
+              const userRef1 = ref(db, `users/${userId}/moments`);
+              
+            let snapshot1 = await get(userRef1); 
+            console.log(snapshot1);
+            let currentmoments = snapshot1.exists() ? snapshot1.val() : [];
+              currentmoments.push(data.uri);
+              console.log(currentmoments);
+              await set(ref(db, `users/${userId}/moments`), currentmoments);
+
+            const momentRef = push(ref(db, 'moments'));
+            const refID = momentRef.key;
+            const newMoment = {
+                 user: userdata, 
+                 likes: [],
+                 comments: []
+            };
+        
+            await set(ref(db, `moments/${refID}`), newMoment);
+            
+      }
+    };
     
       const savePicture = async () => {
         if (image) {
           try {
             const asset = await MediaLibrary.createAssetAsync(image);
             alert('Picture saved! 🎉');
-            setImage(null);
+            setImage(null);        
             console.log('saved successfully');
           } catch (error) {
             console.log(error);

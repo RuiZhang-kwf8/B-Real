@@ -1,6 +1,10 @@
 // HomeScreen.js
 import React from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { useState, useEffect, useRef } from 'react';
+import { Button, Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { db } from '../firebase.js'; // Import the db object from firebase.js
+import { ref, set, push } from 'firebase/database';
+
 
 const HomeScreen = ({ navigation }) => {
   return (

@@ -19,7 +19,7 @@ const ProfileScreen = ({ navigation, route }) => {
   const {name} = route.params;
   const [users, setUsers] = useState([]);
   const [contacts, setContacts] = useState([]);
-  const [contactPermission, setContactPermission] = useState(null); // State to track permission status
+  const [contactPermission, setContactPermission] = useState(null);
   const [searchValue, setSearchValue] = useState("");
   const [global, setGlobal] = useState([]);
   const [lookup, setLookup] = useState("");
@@ -40,16 +40,13 @@ const ProfileScreen = ({ navigation, route }) => {
 
 const addFriend = async (contact) => {
     const friendname = contact.firstName;
-      // Save the new user to the database under 'users/userId'
       console.log(lookup);
       const userRef = ref(db, `users/${lookup}/friends`);
       const snapshot = await get(userRef);
-      let currentFriends = snapshot.val() || []; // Use an empty array if no friends exist yet
+      let currentFriends = snapshot.val() || []; 
 
-      // Add the new friend
       currentFriends.push(friendname);
 
-      // Update the friends array
       await update(ref(db, `users/${lookup}`), {
           friends: currentFriends
       });
@@ -80,7 +77,6 @@ const addFriend = async (contact) => {
         const snapshot = await get(userQuery);
         if (snapshot.exists()) {
           const userData = snapshot.val();
-          // Check if the 'friends' array exists and is empty
           console.log("ight");
             console.log(Object.keys(userData)[0]); 
             const lookups = Object.keys(userData)[0];
@@ -92,10 +88,9 @@ const addFriend = async (contact) => {
           console.log('Processed User Data:', userData);
           console.log('Processed User Data:', user);
     
-          // Ensure the 'friends' key exists
           if (user.friends.length === 1) {
             const { status } = await Contacts.requestPermissionsAsync();
-            setContactPermission(status); // Update permission status state
+            setContactPermission(status); 
             console.log("ight1");
             if (status === 'granted') {
                 console.log("asd"); 
@@ -136,7 +131,7 @@ const addFriend = async (contact) => {
       <Button
         title="View Posts"
         onPress={() =>
-          navigation.navigate('Card') 
+          navigation.navigate('Card', {userdata: name}) 
         }
       />
       {contactPermission === 'granted' ? (

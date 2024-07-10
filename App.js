@@ -30,7 +30,7 @@ export default function App() {
         />
 
 <Stack.Screen
-          name="Card"
+          name="Card"  
           component={Card}
         />
       </Stack.Navigator>
